@@ -1,0 +1,52 @@
+{
+  "name": "ecommerce_shop",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "biome check src/",
+    "format": "biome format --write src/",
+    "preview": "vite preview",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^7.0.6",
+    "@lottiefiles/lottie-player": "^2.0.12",
+    "@reduxjs/toolkit": "^2.14.0",
+    "framer-motion": "^14.14.0",
+    "js-cookie": "^3.0.8",
+    "lottie-player": "^1.0.0",
+    "lottie-react": "^2.4.2",
+    "lucide-react": "^1.73.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-hook-form": "^7.92.0",
+    "react-redux": "^9.3.1",
+    "react-router-dom": "^7.18.5",
+    "react-toastify": "^11.2.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.1.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^10.14.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.7",
+    "globals": "^17.13.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.1",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.6"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  }
+}
