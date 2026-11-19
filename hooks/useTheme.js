@@ -44,7 +44,9 @@ export default function useTheme() {
       root.classList.add("no-theme-transition");
       applyTheme(theme, persist);
       requestAnimationFrame(() =>
-        requestAnimationFrame(() => root.classList.remove("no-theme-transition")),
+        requestAnimationFrame(() =>
+          root.classList.remove("no-theme-transition"),
+        ),
       );
     }
   }, [theme]);
@@ -58,13 +60,10 @@ export default function useTheme() {
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const toggleTheme = useCallback(
-    () => {
-      userPicked.current = true;
-      setTheme((t) => (t === "dark" ? "light" : "dark"));
-    },
-    [],
-  );
+  const toggleTheme = useCallback(() => {
+    userPicked.current = true;
+    setTheme((t) => (t === "dark" ? "light" : "dark"));
+  }, []);
 
   return { theme, isDark: theme === "dark", toggleTheme };
 }

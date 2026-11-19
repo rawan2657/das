@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
-import {
-  ArrowUp,
-  Globe,
-  Mail,
-  MapPin,
-  MessageCircle,
-} from "lucide-react";
+import { ArrowUp, Globe, Mail, MapPin, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoImage from "../../../assets/logo1.png";
 
@@ -38,7 +32,11 @@ const group = {
 };
 const rise = {
   hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
+  },
 };
 
 const heading = "mb-4 text-sm font-bold text-slate-900 dark:text-white";
@@ -86,22 +84,18 @@ export default function Footer() {
         viewport={{ once: true, amount: 0.15 }}
         className="mx-auto max-w-7xl px-4 pt-12 pb-6 sm:px-6"
       >
-
         <motion.div
           variants={rise}
           className="grid gap-10 py-10 sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr_1.2fr]"
         >
           <div>
-                    <Link
-                      to="/home"
-                      className="inline-flex items-center"
-                    >
-                      <img
-                        src={logoImage}
-                        alt="Logo"
-                        className="h-24 w-24 rounded-full object-cover"
-                      />
-                    </Link>
+            <Link to="/home" className="inline-flex items-center">
+              <img
+                src={logoImage}
+                alt="Logo"
+                className="h-24 w-24 rounded-full object-cover"
+              />
+            </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               Shop the future, delivered today. Premium products at the best
               prices with fast delivery across Egypt.
@@ -151,7 +145,9 @@ export default function Footer() {
           variants={rise}
           className="flex flex-col-reverse items-center justify-between gap-4 border-t border-slate-200/70 pt-6 text-sm text-slate-600 dark:text-slate-400 dark:border-white/10 sm:flex-row"
         >
-          <p>&copy; {new Date().getFullYear()} Veroya Store. All rights reserved.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Veroya Store. All rights reserved.
+          </p>
           <button
             type="button"
             onClick={backToTop}

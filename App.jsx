@@ -1,4 +1,5 @@
- import { Suspense, lazy } from "react";
+
+import { Suspense, lazy } from "react";
 import {
   Navigate,
   Outlet,
@@ -7,10 +8,9 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Cookies from "js-cookie";
 
-import StoreLayout from "./components/layout/StoreLayout/StoreLayout";
 import PageLoader from "./components/common/Loader/PageLoader";
+import StoreLayout from "./components/layout/StoreLayout/StoreLayout";
 import ErrorPage from "./pages/error/ErrorPage";
 
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -30,14 +30,19 @@ const OrderDetails = lazy(() => import("./pages/Orders/OrderDetails"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
 const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 
+// التحقق من تسجيل الدخول
 const ProtectedRoute = () => {
-  const token = Cookies.get("token");
+  const token = localStorage.getItem("token");
+
   return token ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-const RootRedirect = () => (
-  <Navigate to={Cookies.get("token") ? "/home" : "/login"} replace />
-);
+// الصفحة الرئيسية
+const RootRedirect = () => {
+  const token = localStorage.getItem("token");
+
+  return <Navigate to={token ? "/home" : "/login"} replace />;
+};
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,13 +50,16 @@ const router = createBrowserRouter(
       <Route index element={<RootRedirect />} />
 
       <Route element={<StoreLayout />}>
+        {/* صفحات متاحة للجميع */}
         <Route path="home" element={<Home />} />
         <Route path="shop" element={<Shop />} />
         <Route path="products/:id" element={<ProductDetails />} />
+
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
 
+        {/* صفحات تحتاج تسجيل دخول */}
         <Route element={<ProtectedRoute />}>
           <Route path="cart" element={<Cart />} />
           <Route path="wishlist" element={<Wishlist />} />
@@ -65,14 +73,13 @@ const router = createBrowserRouter(
         <Route path="*" element={<NotFound />} />
       </Route>
     </Route>
-  )
+  ),
 );
 
 export default function App() {
   return (
     <Suspense fallback={<PageLoader />}>
       <RouterProvider router={router} />
-
     </Suspense>
   );
 }
