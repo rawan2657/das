@@ -1,3 +1,3 @@
 export default function ProductDetails() {
-  return null
+  return null;
 }

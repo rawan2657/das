@@ -1,3 +1,4 @@
+
 import {
   AnimatePresence,
   motion,
@@ -5,7 +6,7 @@ import {
   useScroll,
   useSpring,
 } from "framer-motion";
-import Cookies from "js-cookie";
+
 import {
   Heart,
   LogOut,
@@ -17,10 +18,12 @@ import {
   User,
   X,
 } from "lucide-react";
-import logoImage from "../../../assets/logo1.png";
+
 import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+
+import logoImage from "../../../assets/logo1.png";
 import useTheme from "../../../hooks/useTheme";
 import { apiSlice } from "../../../redux/app/api/apiSlice";
 import { useGetMyCartQuery } from "../../../redux/features/carts/cartApiSlice";
@@ -50,9 +53,14 @@ const menuPanel = {
     },
   },
 };
+
 const menuItem = {
   closed: { opacity: 0, x: -14 },
-  open: { opacity: 1, x: 0, transition: { duration: 0.25, ease: "easeOut" } },
+  open: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.25, ease: "easeOut" },
+  },
 };
 
 const countOf = (res) => {
@@ -63,11 +71,13 @@ const countOf = (res) => {
     res?.products ??
     res?.data ??
     res;
+
   return Array.isArray(list) ? list.length : 0;
 };
 
 function Badge({ n }) {
   if (!n) return null;
+
   return (
     <motion.span
       key={n}
@@ -102,6 +112,7 @@ function DesktopLink({ to, label }) {
               className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg shadow-orange-500/40 ring-1 ring-white/25 dark:ring-white/10"
             />
           )}
+
           <span className="relative z-10">{label}</span>
         </>
       )}
@@ -114,29 +125,62 @@ export default function Navbar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const headerRef = useRef(null);
+
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const token = Cookies.get("token");
-  const { data: cart } = useGetMyCartQuery(undefined, { skip: !token });
-  const { data: wishlist } = useGetMyWishlistQuery(undefined, { skip: !token });
+  // قراءة التوكن من localStorage
+  const [token, setToken] = useState(() =>
+    localStorage.getItem("token")
+  );
+
+  // تحديث Navbar بعد تسجيل الدخول أو الخروج
+  useEffect(() => {
+    const updateToken = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener("authChange", updateToken);
+
+    // مزامنة التوكن عند الرجوع للصفحة
+    window.addEventListener("storage", updateToken);
+
+    return () => {
+      window.removeEventListener("authChange", updateToken);
+      window.removeEventListener("storage", updateToken);
+    };
+  }, []);
+
+  const { data: cart } = useGetMyCartQuery(undefined, {
+    skip: !token,
+  });
+
+  const { data: wishlist } = useGetMyWishlistQuery(undefined, {
+    skip: !token,
+  });
+
   const cartCount = countOf(cart);
   const wishlistCount = countOf(wishlist);
 
   const { scrollY, scrollYProgress } = useScroll();
+
   const progress = useSpring(scrollYProgress, {
     stiffness: 140,
     damping: 30,
     restDelta: 0.001,
   });
-  useMotionValueEvent(scrollY, "change", (y) => setScrolled(y > 12));
+
+  useMotionValueEvent(scrollY, "change", (y) => {
+    setScrolled(y > 12);
+  });
+
   useEffect(() => {
     setScrolled(window.scrollY > 12);
   }, []);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: close panels on route change
   useEffect(() => {
     setMenuOpen(false);
     setSearchOpen(false);
@@ -144,16 +188,23 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!menuOpen && !searchOpen) return;
+
     const close = () => {
       setMenuOpen(false);
       setSearchOpen(false);
     };
+
     const onKey = (e) => e.key === "Escape" && close();
+
     const onPointer = (e) => {
-      if (headerRef.current && !headerRef.current.contains(e.target)) close();
+      if (headerRef.current && !headerRef.current.contains(e.target)) {
+        close();
+      }
     };
+
     document.addEventListener("keydown", onKey);
     document.addEventListener("pointerdown", onPointer);
+
     return () => {
       document.removeEventListener("keydown", onKey);
       document.removeEventListener("pointerdown", onPointer);
@@ -164,20 +215,28 @@ export default function Navbar() {
     setMenuOpen(false);
     setSearchOpen((v) => !v);
   };
+
   const toggleMenu = () => {
     setSearchOpen(false);
     setMenuOpen((v) => !v);
   };
 
+  // تسجيل الخروج
   const logout = () => {
-    Cookies.remove("token");
+    localStorage.removeItem("token");
+
+    setToken(null);
+
+    window.dispatchEvent(new Event("authChange"));
+
     dispatch(apiSlice.util.resetApiState());
+
     navigate("/login");
   };
 
   const mobileLinks = [
     ...links.map((l) =>
-      l.to === "/wishlist" ? { ...l, count: wishlistCount } : l,
+      l.to === "/wishlist" ? { ...l, count: wishlistCount } : l
     ),
     { to: "/cart", label: "Cart", count: cartCount },
   ];
@@ -206,9 +265,10 @@ export default function Navbar() {
           <img
             src={logoImage}
             alt="Logo"
-            className="h-20 w-40 rounded-full  object-cover"
+            className="h-20 w-40 rounded-full object-cover"
           />
         </Link>
+
         <nav
           aria-label="Main"
           className="hidden items-center gap-1 rounded-full border border-slate-200/70 bg-white/60 p-1.5 shadow-inner backdrop-blur-md dark:border-white/10 dark:bg-white/5 md:flex"
@@ -261,6 +321,7 @@ export default function Navbar() {
             <Heart size={18} />
             <Badge n={wishlistCount} />
           </Link>
+
           <Link
             to="/cart"
             aria-label={`Cart${cartCount ? `, ${cartCount} items` : ""}`}
@@ -275,6 +336,7 @@ export default function Navbar() {
               <Link to="/profile" aria-label="Profile" className={iconBtn}>
                 <User size={18} />
               </Link>
+
               <button
                 type="button"
                 aria-label="Log out"
@@ -327,7 +389,10 @@ export default function Navbar() {
             className="lg:hidden"
           >
             <div className="mx-auto max-w-7xl px-4 pb-4 sm:px-6">
-              <SearchBox autoFocus onDone={() => setSearchOpen(false)} />
+              <SearchBox
+                autoFocus
+                onDone={() => setSearchOpen(false)}
+              />
             </div>
           </motion.div>
         )}
@@ -356,6 +421,7 @@ export default function Navbar() {
                     }
                   >
                     {l.label}
+
                     {l.count ? (
                       <span className="grid h-5 min-w-5 place-items-center rounded-full bg-orange-500 px-1 text-[10px] font-bold text-white ring-1 ring-white/60">
                         {l.count > 99 ? "99+" : l.count}
@@ -364,6 +430,7 @@ export default function Navbar() {
                   </NavLink>
                 </motion.div>
               ))}
+
               {token && (
                 <motion.div variants={menuItem}>
                   <button

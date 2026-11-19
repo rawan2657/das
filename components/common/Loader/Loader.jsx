@@ -62,7 +62,11 @@ export default function Loader({
             mask: `radial-gradient(farthest-side, transparent calc(100% - ${s.arc}px), #000 calc(100% - ${s.arc}px))`,
           }}
           animate={reduceMotion ? {} : { rotate: 360 }}
-          transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }}
+          transition={{
+            duration: 0.9,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "linear",
+          }}
         />
         <span
           className={`absolute left-1/2 top-1/2 ${s.core} -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-500 shadow-[0_0_14px_rgba(249,115,22,0.9)]`}
@@ -84,7 +88,7 @@ export default function Loader({
             }
             transition={{
               duration: 0.9,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               delay: i * 0.12,
               ease: "easeInOut",
             }}

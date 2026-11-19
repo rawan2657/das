@@ -68,7 +68,8 @@ export default function SearchBox({
     () => (enabled ? listOf(data).slice(0, MAX_RESULTS) : []),
     [data, enabled],
   );
-  const waiting = query.trim().length >= MIN_CHARS && debounced !== query.trim();
+  const waiting =
+    query.trim().length >= MIN_CHARS && debounced !== query.trim();
   const showPanel = open && query.trim().length >= MIN_CHARS;
 
   useEffect(() => {

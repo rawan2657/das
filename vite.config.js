@@ -1,23 +1,19 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig(() => {
-  return {
-    plugins: [
-      react(),
-      tailwindcss(),
-    ],
-    
-    server: {
-      proxy: {
-        '/api': {
-          target: 'https://e-commerce-api-3wara.vercel.app',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
+
+export default defineConfig({
+  plugins: [react(), tailwindcss()],
+
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://e-commerce-api-3wara.vercel.app",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
-      port: 5000,
     },
-  };
+    port: 5000,
+  },
 });
