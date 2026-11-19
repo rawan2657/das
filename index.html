@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="Veroya Store — premium products at the best prices with fast delivery across Egypt." />
+    <meta name="theme-color" content="#0b0b0f" />
+    <title>Veroya Store</title>
+    <link rel="icon" type="image/png" href="/logo1.png" />
+    <link rel="apple-touch-icon" href="/logo1.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script>
+      (function () {
+        var m = document.cookie.match(/(?:^|; )veroya-theme=([^;]*)/);
+        var t = m ? decodeURIComponent(m[1])
+                 : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.classList.toggle('dark', t === 'dark');
+        document.documentElement.style.colorScheme = t;
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', t === 'dark' ? '#0b0b0f' : '#f8fafc');
+      })();
+    </script>
+    <style>
+      html, body { overflow-x: clip; }
+      #boot-loader {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        background: #0b0b0f url('/bg-image.jpeg') center / cover no-repeat;
+        transition: opacity 0.45s ease, visibility 0.45s ease;
+      }
+
+      #boot-loader::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(11, 11, 15, 0.7);
+        -webkit-backdrop-filter: blur(18px);
+        backdrop-filter: blur(18px);
+      }
+      #boot-loader > * { position: relative; }
+      html:not(.dark) #boot-loader::before { background: rgba(255, 255, 255, 0.72); }
+      html:not(.dark) .boot-name { color: #0f172a; }
+      html:not(.dark) .boot-bar { background: rgba(15, 23, 42, 0.12); }
+      #boot-loader.boot-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .boot-ring {
+        position: relative;
+        width: 96px;
+        height: 96px;
+      }
+      .boot-ring::before,
+      .boot-ring::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        padding: 3px;
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        mask-composite: exclude;
+      }
+      .boot-ring::before {
+        inset: 0;
+        background: conic-gradient(from 0deg, transparent 0%, #f97316 25%, transparent 50%);
+        animation: boot-spin 1.6s linear infinite;
+      }
+      .boot-ring::after {
+        inset: 12px;
+        background: conic-gradient(from 180deg, transparent 0%, #fbbf24 30%, transparent 60%);
+        animation: boot-spin-rev 2.4s linear infinite;
+      }
+      .boot-core {
+        position: absolute;
+        inset: 26px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 35%, #fb923c, #ea580c);
+        animation: boot-pulse 1.8s ease-in-out infinite;
+      }
+      .boot-name {
+        display: flex;
+        gap: 14px;
+        font-family: "Manrope", ui-sans-serif, system-ui, sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: 0.22em;
+        color: #fff;
+      }
+      .boot-name span:last-child { color: #f97316; }
+      .boot-bar {
+        position: relative;
+        width: 180px;
+        height: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+      }
+      .boot-bar::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 35%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, transparent, #f97316, transparent);
+        animation: boot-shimmer 1.3s ease-in-out infinite;
+      }
+      @keyframes boot-spin { to { transform: rotate(360deg); } }
+      @keyframes boot-spin-rev { to { transform: rotate(-360deg); } }
+      @keyframes boot-shimmer {
+        0% { transform: translateX(-120%); }
+        100% { transform: translateX(420%); }
+      }
+      @keyframes boot-pulse {
+        0%, 100% { transform: scale(0.9); opacity: 0.75; }
+        50% { transform: scale(1.05); opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .boot-ring::before, .boot-ring::after, .boot-core, .boot-bar::after { animation: none; }
+      }
+    </style>
+    <script>
+      (function () {
+        var min = 700, start = Date.now(), done = false;
+        function finish() {
+          if (done) return;
+          done = true;
+          var el = document.getElementById('boot-loader');
+          if (!el) return;
+          var wait = Math.max(0, min - (Date.now() - start));
+          setTimeout(function () {
+            el.classList.add('boot-done');
+
+            setTimeout(function () { el.remove(); }, 600);
+          }, wait);
+        }
+        if (document.readyState === 'complete') finish();
+        else window.addEventListener('load', finish);
+        var root = document.getElementById('root');
+        if (root) new MutationObserver(function (_, obs) {
+          if (root.childElementCount > 0) { obs.disconnect(); finish(); }
+        }).observe(root, { childList: true });
+        setTimeout(finish, 4000);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="boot-loader" aria-hidden="true">
+      <div class="boot-ring"><div class="boot-core"></div></div>
+      <div class="boot-name"><span>VEROYA</span><span>STORE</span></div>
+      <div class="boot-bar"></div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
